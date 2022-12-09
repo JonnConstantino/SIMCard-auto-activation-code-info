@@ -10,7 +10,7 @@ parser.add_argument('arq_simcard', help='Arquivo onde está os IMSI dos SIMCards
 parser.add_argument('arq_ativacao', help='Arquivo onde está os IMSI dos SIMCards com os códigos KI e OPC.')
 args = parser.parse_args()
 
-f_novo = open(args.arq_simcard+'_ativado', 'w')
+f_novo = open(args.arq_simcard.replace('.csv', '_ativado.csv'), 'w')
 f_simcard = open(args.arq_simcard, 'r')
 
 f_novo.write('IMSI,KI,OPC,ACTIV_CODE\n')
