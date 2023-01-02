@@ -39,6 +39,5 @@ for line_simcard in f_simcard:
             count += 1
             line_halob = line_gemalto.replace(line_simcard.strip('\n'), line_simcard.strip('\n') + ',' + str(count) + ',' + str(UL_DL_AMBR) + ',' + str(UL_DL_AMBR))
             line_apn = line_simcard.strip('\n') + ',' + APN + ',' + str(count) + ',' + DEFAULT + ',' + GWIP + ',' + QCI + ',' + ARPPRIORLEV + ',' + ARPPCI + ',' + ARPPVI + ',' + UL_DL_AMBR + ',' + UL_DL_AMBR + ',' + PDNTYPE + ',' + SERVEDPARTYIPV4ADDR.replace('35', str(34+count)) + ',' + SERVEDPARTYIPV6ADDRPREFIX + ',' + PRIDNSIPADDR + ',' + SECONDARYDNSIPADDR + '\n'
-            print(line_apn)
             f_novo_halob.write(line_halob)
             f_novo_apn.write(line_apn)
