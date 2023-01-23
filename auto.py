@@ -14,7 +14,7 @@ ARPPRIORLEV = '14'
 ARPPCI = 'on'
 ARPPVI = 'off'
 PDNTYPE = 'ipv4'
-SERVEDPARTYIPV4ADDR = '172.16.0.35'
+SERVEDPARTYIPV4ADDR = '172.16.x'
 SERVEDPARTYIPV6ADDRPREFIX = '1111'
 PRIDNSIPADDR = '8.8.8.8'
 SECONDARYDNSIPADDR = '114.114.114.114'
@@ -31,13 +31,19 @@ f_simcard = open(args.arq_simcard, 'r')
 f_novo_halob.write("IMSI,IMSIID(no-repeat),UEAMBRDL(bps),UEAMBRUL(bps),KI,OPC,ACTIV_CODE\n")
 f_novo_apn.write("IMSI,APNNAME,CONTEXTID(The same user value is different),DEFAULTAPN(There's only one default for each user),GWIP,QCI(5-9),ARPPRIORLEV,ARPPCI,ARPPVI,APNAMBRUL(bps,1000-1000000000),APNAMBRDL(bps,1000-1000000000),PDNTYPE,SERVEDPARTYIPV4ADDR,SERVEDPARTYIPV6ADDRPREFIX,PRIDNSIPADDR,SECONDARYDNSIPADDR\n")
 
+ip_network = 1
+ip_final = 0
 count = 0
 for line_simcard in f_simcard:
     f_gemalto = open(args.arq_ativacao, 'r')
     for line_gemalto in f_gemalto:
         if line_simcard.strip('\n') in line_gemalto:
             count += 1
+            ip_final += 1
+            if ip_final == 255:
+                ip_network += 1
+                ip_final = 1
             line_halob = line_gemalto.replace(line_simcard.strip('\n'), line_simcard.strip('\n') + ',' + str(count) + ',' + str(UL_DL_AMBR) + ',' + str(UL_DL_AMBR))
-            line_apn = line_simcard.strip('\n') + ',' + APN + ',' + str(count) + ',' + DEFAULT + ',' + GWIP + ',' + QCI + ',' + ARPPRIORLEV + ',' + ARPPCI + ',' + ARPPVI + ',' + UL_DL_AMBR + ',' + UL_DL_AMBR + ',' + PDNTYPE + ',' + SERVEDPARTYIPV4ADDR.replace('35', str(34+count)) + ',' + SERVEDPARTYIPV6ADDRPREFIX + ',' + PRIDNSIPADDR + ',' + SECONDARYDNSIPADDR + '\n'
+            line_apn = line_simcard.strip('\n') + ',' + APN + ',' + str(count) + ',' + DEFAULT + ',' + GWIP + ',' + QCI + ',' + ARPPRIORLEV + ',' + ARPPCI + ',' + ARPPVI + ',' + UL_DL_AMBR + ',' + UL_DL_AMBR + ',' + PDNTYPE + ',' + SERVEDPARTYIPV4ADDR.replace('x', str(ip_network) + '.' + str(ip_final)) + ',' + SERVEDPARTYIPV6ADDRPREFIX + ',' + PRIDNSIPADDR + ',' + SECONDARYDNSIPADDR + '\n'
             f_novo_halob.write(line_halob)
             f_novo_apn.write(line_apn)
